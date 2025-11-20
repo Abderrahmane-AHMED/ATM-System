@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ATM System</title>
+
+    <!-- Import maps (empty for now) -->
+    <script type="importmap"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/slick.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/slick-theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/normarlize.css" asp-append-version="true" />
+ 
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Start Header -->
+    <div class="header" id="header">
+        <div class="container">
+            <a href="~/Home/Index" class="logo">ATM System</a>
+            <ul class="main-nav">
+                <li>
+                    <div class="header-account">
+                        <span class="account-title">My Account</span>
+                        <ul>
+                           
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- End Header -->
+    <!-- Start Main Content -->
+    <div class="content">
+        @RenderBody()
+    </div>
+    <!-- End Main Content -->
+    <!-- Start Footer -->
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            
+        </div>
+    </footer>
+    <!-- End Footer -->
+    @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
+
+    <!-- Scripts -->
+    <script src="~/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- Optional page-specific scripts -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
