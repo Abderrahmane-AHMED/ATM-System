@@ -2,18 +2,21 @@
 
 namespace ATMSystem.Controllers
 {
-    public class HomeController : Controller
+    public class TransactionController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult MainMenueScreen()
+        public IActionResult QuickWithdrow()
         {
             return View();
         }
-    
-        public IActionResult CheckBalance()
+        public IActionResult NormalWithdrow()
+        {
+            return View();
+        }
+        public IActionResult Deposit()
         {
             return View();
         }

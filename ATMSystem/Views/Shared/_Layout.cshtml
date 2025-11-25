@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -33,7 +35,19 @@
                     <div class="header-account">
                         <span class="account-title">My Account</span>
                         <ul>
-                           
+                            @{
+                                
+                                bool isUser = signInManager.IsSignedIn(User);
+                            }
+
+                            @if (isUser)
+                            {
+                                <li><a asp-controller="Client" asp-action="LogOut">Logout</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-controller="Client" asp-action="Login">Login</a></li>
+                            }
                         </ul>
                     </div>
                 </li>
