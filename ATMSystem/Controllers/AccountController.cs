@@ -1,9 +1,7 @@
-﻿using Domain;
-using Interfaces.Services;
+﻿using Interfaces.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -26,7 +24,7 @@ namespace ATMSystem.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string accountNumber, int pinCode, string? returnUrl = null)
+        public async Task<IActionResult> Login(string accountNumber, string pinCode, string? returnUrl = null)
         {
             if (string.IsNullOrEmpty(accountNumber))
             {
@@ -34,21 +32,20 @@ namespace ATMSystem.Controllers
                 return View();
             }
 
-            if (pinCode <= 0)
+            if (!int.TryParse(pinCode, out int pin))
             {
-                ModelState.AddModelError("", "PIN Code is required.");
+                ModelState.AddModelError("", "PIN must be numbers only.");
                 return View();
             }
 
             var client = _clientService.FindByAccountNumber(accountNumber);
-
             if (client == null)
             {
                 ModelState.AddModelError("", "Invalid Account Number.");
                 return View();
             }
 
-            if (client.PinCode != pinCode)
+            if (client.PinCode != pin)
             {
                 ModelState.AddModelError("", "Invalid PIN.");
                 return View();
@@ -58,32 +55,36 @@ namespace ATMSystem.Controllers
             {
                 new Claim(ClaimTypes.Name, client.FullName()),
                 new Claim("ClientId", client.ClientId.ToString()),
-                new Claim("AccountNumber", client.AccountNumber),
+                new Claim("AccountNumber", client.AccountNumber)
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
+            // تسجيل الدخول
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal,
                 new AuthenticationProperties
                 {
                     IsPersistent = true,
-                    ExpiresUtc = DateTime.UtcNow.AddHours(2)
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
                 });
 
-            return Redirect(returnUrl ?? "/");
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction("MainMenueScreen", "Home");
         }
 
-       
         [Authorize]
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("~/");
+            return Redirect("~/Account/Login");
         }
-
 
         #endregion
     }

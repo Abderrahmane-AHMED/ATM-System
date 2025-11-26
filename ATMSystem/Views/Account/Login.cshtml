@@ -32,7 +32,10 @@
     <div class="form">
         <div class="content">
             <h2>Login Your Account </h2>
-         
+            <div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
             <form method="post"
                   asp-controller="Account" asp-action="Login"
                   class="theme-form">
