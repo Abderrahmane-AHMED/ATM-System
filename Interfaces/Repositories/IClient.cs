@@ -11,13 +11,11 @@ namespace Interfaces.Repositories
     {
 
 
-       
 
-        TbClient FindByAccountNumber(string accountNumber);
 
-        void ClientDeposit(int clientId, decimal amount);
-
-        void ClientWithdraw(int clientId, decimal amount);
+        Task<TbClient> FindByAccountNumberAsync(string accountNumber);
+        Task ClientDepositAsync(string accountNumber, decimal amount);
+        Task ClientWithdrawAsync(string accountNumber, decimal amount);
 
 
     }

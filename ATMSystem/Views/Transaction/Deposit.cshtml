@@ -1,20 +1,31 @@
-﻿<div class="main-menue" id="main-menue">
+﻿@model Domain.TbClient;
+
+<div class="main-menue" id="main-menue">
     <div class="container">
 
         <h2 class="title-one text-center mb-4">Deposit</h2>
 
-        <form asp-action="Deposit" method="post" class="p-4 border rounded shadow-sm bg-light">
+        <form asp-action="Deposit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="accountNumber" value="@Model.AccountNumber" />
 
-            <div class="form-group mb-3">
-                <label for="depositAmount" class="fw-bold">Amount to Deposit</label>
-                <input type="number" step="0.01" name="depositAmount" class="form-control" required />
+            <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" value="@Model.AccountNumber" class="form-control" readonly />
             </div>
 
-            <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-success">Confirm Deposit</button>
-                <a asp-action="MainMenueScreen" class="btn btn-secondary">Back</a>
+            <div class="form-group">
+                <label>Current Balance</label>
+                <input type="text" value="@Model.Balance" class="form-control" readonly />
             </div>
 
+            <div class="form-group">
+                <label for="depositAmount">Amount to Deposit</label>
+                <input type="number" step="" name="depositAmount" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-success mt-2">Confirm Deposit</button>
+            <a asp-controller="Home" asp-action="MainMenueScreen" class="btn btn-secondary mt-2">Cancel</a>
         </form>
 
     </div>

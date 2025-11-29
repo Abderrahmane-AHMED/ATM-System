@@ -1,32 +1,40 @@
-﻿<div class="main-menue" id="main-menue">
+﻿@model Domain.TbClient;
+
+<div class="main-menue" id="main-menue">
     <div class="container">
 
         <h2 class="title-one text-center mb-4">Withdraw</h2>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
 
-        <form asp-action="Withdraw" method="post" class="p-4 border rounded shadow-sm bg-light">
+        <form asp-action="NormalWithdrow" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="accountNumber" value="@Model.AccountNumber" />
 
-            <input type="hidden" name="clientId" value="" />
-
-            <div class="form-group mb-3">
-                <label class="fw-bold">Account Number</label>
-                <input type="text" value="" class="form-control" readonly />
+            <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" value="@Model.AccountNumber" class="form-control" readonly />
             </div>
 
-            <div class="form-group mb-3">
-                <label class="fw-bold">Current Balance</label>
-                <input type="text" value="" class="form-control" readonly />
+            <div class="form-group">
+                <label>Current Balance</label>
+                <input type="text" value="@Model.Balance" class="form-control" readonly />
             </div>
 
-            <div class="form-group mb-3">
-                <label for="withdrawAmount" class="fw-bold">Amount to Withdraw</label>
-                <input type="number" step="0.01" name="withdrawAmount" class="form-control" required />
+            <div class="form-group">
+                <label for="withdrowAmount">Amount to Withdraw</label>
+                <input type="number" step="" name="withdrowAmount" class="form-control" required />
             </div>
 
-            <div class="d-flex gap-2 mt-3">
-                <button type="submit" class="btn btn-danger">Withdraw</button>
-                <a asp-action="MainMenueScreen" class="btn btn-secondary">Back</a>
-            </div>
-
+            <button type="submit" class="btn btn-danger mt-2">Confirm Withdraw</button>
+            <a asp-controller="Home" asp-action="MainMenueScreen" class="btn btn-secondary mt-2">Cancel</a>
         </form>
 
     </div>

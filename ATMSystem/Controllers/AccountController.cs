@@ -38,13 +38,7 @@ namespace ATMSystem.Controllers
                 return View();
             }
 
-            var client = _clientService.FindByAccountNumber(accountNumber);
-            if (client == null)
-            {
-                ModelState.AddModelError("", "Invalid Account Number.");
-                return View();
-            }
-
+            var client = await _clientService.FindByAccountNumberAsync(accountNumber);
             if (client.PinCode != pin)
             {
                 ModelState.AddModelError("", "Invalid PIN.");
@@ -52,16 +46,17 @@ namespace ATMSystem.Controllers
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, client.FullName()),
-                new Claim("ClientId", client.ClientId.ToString()),
-                new Claim("AccountNumber", client.AccountNumber)
-            };
+{
+    new Claim(ClaimTypes.Name, client.FullName()),
+    new Claim("ClientId", client.ClientId.ToString()),
+    new Claim("AccountNumber", client.AccountNumber)
+};
+
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            // تسجيل الدخول
+            
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal,

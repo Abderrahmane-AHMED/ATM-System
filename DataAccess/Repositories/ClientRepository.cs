@@ -1,11 +1,9 @@
 ﻿using DataAccess.DbContext.Data;
 using Domain;
 using Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -14,49 +12,74 @@ namespace DataAccess.Repositories
     {
         private readonly ATMSystemContext _context;
         private readonly ILogger<ClientRepository> _logger;
+
         public ClientRepository(ATMSystemContext context, ILogger<ClientRepository> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-
-
-
- 
-        public TbClient FindByAccountNumber(string accountNumber)
+        public async Task<TbClient> FindByAccountNumberAsync(string accountNumber)
         {
-            return _context.Clients.FirstOrDefault(c => c.AccountNumber == accountNumber);
-        }
- 
-        public void ClientDeposit(int clientId, decimal amount)
-        {
-            var existingClient = _context.Clients.FirstOrDefault(c => c.ClientId == clientId);
-            if (existingClient == null)
-                throw new ArgumentException("Client not found");
-
-            existingClient.Balance += amount;
-            _context.SaveChanges();
+            return await _context.Clients.FirstOrDefaultAsync(c => c.AccountNumber == accountNumber);
         }
 
-        public void ClientWithdraw(int clientId , decimal amount)
+        public async Task ClientDepositAsync(string accountNumber, decimal amount)
         {
-            var existingClient = _context.Clients.FirstOrDefault(c => c.ClientId == clientId);
-
-            if (existingClient == null)
-                throw new ArgumentException("Client not found");
-
             if (amount <= 0)
-                throw new ArgumentException("Invalid withdraw amount.");
+                throw new ArgumentException("Deposit amount must be greater than zero.");
 
-            if (existingClient.Balance < amount)
+            var client = await _context.Clients.FirstOrDefaultAsync(c => c.AccountNumber == accountNumber);
+            if (client == null)
+                throw new ArgumentException("Client not found");
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                client.Balance += amount;
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                _logger.LogInformation($"Deposit of {amount:C} successful for account {accountNumber}");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, $"Deposit failed for account {accountNumber}");
+                throw;
+            }
+        }
+
+        public async Task ClientWithdrawAsync(string accountNumber, decimal amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentException("Withdraw amount must be greater than zero.");
+
+            if (amount % 10 != 0)
+                throw new ArgumentException("You can only withdraw multiples of 10.");
+
+            var client = await _context.Clients.FirstOrDefaultAsync(c => c.AccountNumber == accountNumber);
+            if (client == null)
+                throw new ArgumentException("Client not found");
+
+            if (client.Balance < amount)
                 throw new InvalidOperationException("Insufficient balance.");
 
-            existingClient.Balance -= amount;
-            _context.SaveChanges();
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                client.Balance -= amount;
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-
+                _logger.LogInformation($"Withdrawal of {amount:C} successful for account {accountNumber}");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, $"Withdrawal failed for account {accountNumber}");
+                throw;
+            }
         }
-        
     }
 }
