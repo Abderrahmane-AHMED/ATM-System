@@ -1,17 +1,57 @@
-# ATM System
+# 🏧 ATM System
 
-This ATM System is fully integrated with my previous **Bank System** project, using the same database.  
-All operations performed here (Quick Withdraw, Normal Withdraw, Deposit, and Check Balance) directly affect the bank system in real-time.  
+A real-time ATM interface fully integrated with the Bank Management System.
 
-- **Quick Withdraw:** Withdraw preset amounts (10, 20, 50, 100, 200, 300, 400, 500) instantly.  
-- **Normal Withdraw:** Allows custom withdrawals, validating multiples of 10 only.  
-- **Deposit:** Add funds directly to the same bank account.  
-- **Check Balance:** Always displays the real-time bank balance.  
+This project shares the same database as the banking system.  
+All ATM transactions instantly update the bank database.
 
-This system acts as both a standalone ATM interface and a complementary extension to the main bank system. Every transaction here is reflected immediately in the bank database.  
+---
 
-**Technologies Used:**  
-- ASP.NET Core MVC  
-- Entity Framework Core  
-- Async Interface Repository Service and Controller  
-- Razor Views with validation and real-time error handling
+## 🔄 System Integration
+
+The ATM system acts as:
+
+- A standalone ATM interface
+- A complementary extension of the Bank Management System
+
+Every transaction is synchronized in real time.
+
+---
+
+## 💳 Features
+
+### 🔹 Quick Withdraw
+Preset withdrawal amounts:
+10, 20, 50, 100, 200, 300, 400, 500
+
+### 🔹 Normal Withdraw
+- Custom withdrawal amount
+- Validates multiples of 10 only
+- Checks available balance before processing
+
+### 🔹 Deposit
+- Adds funds directly to the same linked bank account
+
+### 🔹 Check Balance
+- Displays real-time account balance
+
+---
+
+## 🛠 Technologies Used
+
+- ASP.NET Core MVC
+- Entity Framework Core
+- Async Repository Pattern
+- Service Layer (BLL)
+- Razor Views with validation
+- SQL Server
+
+---
+
+## 🎯 What This Project Demonstrates
+
+- Real-time database synchronization
+- Business rule validation
+- Clean separation of concerns
+- Transaction handling logic
+- Practical banking system extension
