@@ -55,3 +55,9 @@ Preset withdrawal amounts:
 - Clean separation of concerns
 - Transaction handling logic
 - Practical banking system extension
+
+  ## 🎥 Video Demonstration
+
+A short demonstration video of the application is available on LinkedIn:
+
+🔗 [![Watch the Demo](https://img.shields.io/badge/-Watch-blue?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/posts/abderrahmane-ahmed-69436438a_a-fully-integrated-atm-system-connected-activity-7402731787241586690-Zwa2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAF_OCNABFBzIiLvo8ginXAVDM0vLth3w7cc)
